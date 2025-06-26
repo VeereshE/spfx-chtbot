@@ -1,0 +1,46 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "microsoft-chat-bot-client-side-solution",
+    "id": "f49c9cba-72f7-420f-922a-cd73aa9a8606",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.20.0"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "microsoft-chat-bot description"
+      },
+      "longDescription": {
+        "default": "microsoft-chat-bot description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "microsoft-chat-bot Feature",
+        "description": "The feature that activates elements of the microsoft-chat-bot solution.",
+        "id": "e15d7670-4951-4e2d-b9f4-b36b0cce5bca",
+        "version": "1.0.0.0"
+      }
+    ],
+    "webApiPermissionRequests": [
+      {
+        "resource": "Microsoft Graph",
+        "scope": "Mail.Read"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/microsoft-chat-bot.sppkg"
+  }
+}
