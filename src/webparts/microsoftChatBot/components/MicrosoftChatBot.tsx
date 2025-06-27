@@ -3,6 +3,7 @@ import { useState } from 'react';
 import styles from './MicrosoftChatBot.module.scss';
 import type { IMicrosoftChatBotProps } from './IMicrosoftChatBotProps';
 import { FaPaperPlane, FaRobot, FaTimes } from 'react-icons/fa';
+import { MSGraphClientV3 } from '@microsoft/sp-http';
 
 interface IMessage {
   from: 'bot' | 'user';
@@ -10,7 +11,7 @@ interface IMessage {
   time: string;
 }
 
-const MicrosoftChatBot: React.FC<IMicrosoftChatBotProps> = ({ hasTeamsContext, userDisplayName }) => {
+const MicrosoftChatBot: React.FC<IMicrosoftChatBotProps> = ({ hasTeamsContext, userDisplayName, context }) => {
   const [inputValue, setInputValue] = useState<string>('');
   const [messages, setMessages] = useState<IMessage[]>([
     {
@@ -22,6 +23,11 @@ const MicrosoftChatBot: React.FC<IMicrosoftChatBotProps> = ({ hasTeamsContext, u
       from: 'user',
       text: "I'm good, thanks! How about you?",
       time: '2/6/2022 10:46 AM'
+    },
+    {
+      from: 'bot',
+      text: 'I am fine, how can I assist you?',
+      time: '2/6/2022 10:48 AM'
     }
   ]);
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -30,7 +36,7 @@ const MicrosoftChatBot: React.FC<IMicrosoftChatBotProps> = ({ hasTeamsContext, u
     setInputValue(event.target.value);
   };
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!inputValue.trim()) return;
 
     const newMessage: IMessage = {
@@ -41,6 +47,40 @@ const MicrosoftChatBot: React.FC<IMicrosoftChatBotProps> = ({ hasTeamsContext, u
 
     setMessages(prevMessages => [...prevMessages, newMessage]);
     setInputValue('');
+
+    try {
+      const graphClient: MSGraphClientV3 = await context.msGraphClientFactory.getClient('3');
+
+      const recipientEmail = 'yashashree.kommajoshyula@rsmus.com'; 
+      const chatResponse = await graphClient.api('/chats')
+        .post({
+          chatType: 'oneOnOne',
+          members: [
+            {
+              '@odata.type': '#microsoft.graph.aadUserConversationMember',
+              roles: ['owner'],
+              'user@odata.bind': `https://graph.microsoft.com/v1.0/users/${recipientEmail}`
+              //`https://graph.microsoft.com/v1.0/users/${yashashree.kommajoshyula@rsmus.com}`
+            },
+            {
+              '@odata.type': '#microsoft.graph.aadUserConversationMember',
+              roles: ['owner'],
+              'user@odata.bind': `https://graph.microsoft.com/v1.0/me`
+            }
+          ]
+        });
+
+      await graphClient.api(`/chats/${chatResponse.id}/messages`)
+        .post({
+          body: {
+            content: newMessage.text
+          }
+        });
+       console.log("Message Added ..............")
+    } catch (error) {
+     console.error('Error sending message via Graph API:', error);
+      
+    }
   };
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -55,30 +95,22 @@ const MicrosoftChatBot: React.FC<IMicrosoftChatBotProps> = ({ hasTeamsContext, u
 
   return (
     <section className={styles.chatWrapper}>
-      {/* Avatar icon */}
       {!isOpen && (
         <div className={styles.avatarIcon} onClick={toggleChatBot} aria-label="Open chat">
           <FaRobot size={32} />
         </div>
       )}
 
-      {/* Chat window */}
       {isOpen && (
         <div className={`${styles.microsoftChatBot} ${hasTeamsContext ? styles.teams : ''}`}>
           <div className={styles.header}>
-            <img
-              src="https://your-company-logo-url.com/logo.png"
-              alt="Company Logo"
-              className={styles.logo}
-            />
+            <img src="/dist/rsmLogo.png" alt="Company Logo" className={styles.logo} />
             <div>
-            
               <h1>Welcome {userDisplayName}!</h1>
               <h3>RSM Support Center</h3>
             </div>
-
             <div className={styles.closeIcon} onClick={toggleChatBot} aria-label="Close chat">
-              <FaTimes size={20} />
+              <FaTimes size={32} />
             </div>
           </div>
 

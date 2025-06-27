@@ -33,12 +33,17 @@
         "version": "1.0.0.0"
       }
     ],
-    "webApiPermissionRequests": [
-      {
-        "resource": "Microsoft Graph",
-        "scope": "Mail.Read"
-      }
-    ]
+   "webApiPermissionRequests": [
+  {
+    "resource": "Microsoft Graph",
+    "scope": "Chat.ReadWrite"
+  },
+  {
+    "resource": "Microsoft Graph",
+    "scope": "User.Read"
+  }
+]
+
   },
   "paths": {
     "zippedPackage": "solution/microsoft-chat-bot.sppkg"
