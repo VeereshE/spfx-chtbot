@@ -13,29 +13,15 @@ interface IMessage {
 
 const MicrosoftChatBot: React.FC<IMicrosoftChatBotProps> = ({ hasTeamsContext, userDisplayName, context }) => {
   const [inputValue, setInputValue] = useState<string>('');
-  const [messages, setMessages] = useState<IMessage[]>([
-    {
-      from: 'bot',
-      text: 'Hi, how are you?',
-      time: '2/6/2022 10:45 AM'
-    },
-    {
-      from: 'user',
-      text: "I'm good, thanks! How about you?",
-      time: '2/6/2022 10:46 AM'
-    },
-    {
-      from: 'bot',
-      text: 'I am fine, how can I assist you?',
-      time: '2/6/2022 10:48 AM'
-    }
-  ]);
+  const [messages, setMessages] = useState<IMessage[]>([]);
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
   };
 
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const handleSend = async () => {
     if (!inputValue.trim()) return;
 
@@ -83,12 +69,15 @@ const MicrosoftChatBot: React.FC<IMicrosoftChatBotProps> = ({ hasTeamsContext, u
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      handleSend();
+      // eslint-disable-next-line no-void
+      void handleSend();
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const toggleChatBot = () => {
     setIsOpen(prev => !prev);
   };
