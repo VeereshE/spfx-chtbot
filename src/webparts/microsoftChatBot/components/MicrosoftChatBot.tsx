@@ -104,7 +104,7 @@ const MicrosoftChatBot: React.FC<IMicrosoftChatBotProps> = ({ hasTeamsContext, u
       {isOpen && (
         <div className={`${styles.microsoftChatBot} ${hasTeamsContext ? styles.teams : ''}`}>
           <div className={styles.header}>
-            <img src="/dist/rsmLogo.png" alt="Company Logo" className={styles.logo} />
+            <img src="https://rsmus.com/content/experience-fragments/rsm/us/en/site/header/master/_jcr_content/root/globalheader/mainnav/logo.coreimg.png/1648142668633/logo.png" alt="Company Logo" className={styles.logo} />
             <div>
               <h1>Welcome {userDisplayName}!</h1>
               <h3>RSM Support Center</h3>
