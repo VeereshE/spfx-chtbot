@@ -20,22 +20,27 @@ const MicrosoftChatBot: React.FC<IMicrosoftChatBotProps> = ({
   const [messages, setMessages] = useState<IMessage[]>([]);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [chatId, setChatId] = useState<string | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [userSuggestions, setUserSuggestions] = useState<any[]>([]);
   const [showSuggestions, setShowSuggestions] = useState<boolean>(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [selectedUser, setSelectedUser] = useState<any | null>(null);
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 
   const handleInputChange = async (
     event: React.ChangeEvent<HTMLInputElement>
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   ) => {
     const value = event.target.value;
     setInputValue(value);
-     const atIndex = value.lastIndexOf("@");
+    const atIndex = value.lastIndexOf("@");
     const searchTerm = value.slice(atIndex + 1).trim();
 
-    if (atIndex !== -1 && (searchTerm.length === 0 || /^[a-zA-Z\s]*$/.test(searchTerm))) {
+    if (
+      atIndex !== -1 &&
+      (searchTerm.length === 0 || /^[a-zA-Z\s]*$/.test(searchTerm))
+    ) {
       try {
         const graphClient: MSGraphClientV3 =
           await context.msGraphClientFactory.getClient("3");
@@ -52,7 +57,7 @@ const MicrosoftChatBot: React.FC<IMicrosoftChatBotProps> = ({
     }
   };
 
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/no-explicit-any
   const handleUserSelect = (user: any) => {
     const updatedText = inputValue.replace(/@$/, `@${user.displayName} `);
     setInputValue(updatedText);
@@ -62,7 +67,10 @@ const MicrosoftChatBot: React.FC<IMicrosoftChatBotProps> = ({
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const handleSend = async () => {
-    if (!inputValue.trim()) return;
+    if (!inputValue.trim()){
+      alert("Please enter a message before sending.");
+      return;
+    } 
 
     const newMessage: IMessage = {
       from: "user",
@@ -126,7 +134,7 @@ const MicrosoftChatBot: React.FC<IMicrosoftChatBotProps> = ({
         await context.msGraphClientFactory.getClient("3");
       const usersResponse = await graphClient.api("/users").get();
       console.log("Fetched Users:", usersResponse);
-     // alert(usersResponse);
+      // alert(usersResponse);
     } catch (error) {
       console.error("Error fetching users:", error);
     }
@@ -203,6 +211,7 @@ const MicrosoftChatBot: React.FC<IMicrosoftChatBotProps> = ({
                   </span>
                   <span className={styles.timeStamp}>{msg.time}</span>
                 </div>
+                
                 <p className={styles.messageText}>{msg.text}</p>
               </div>
             ))}
